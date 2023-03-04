@@ -25,7 +25,7 @@ export interface Status {
   code: number;
 }
 
-export type Source = 'lrb' | "fzb" | 'llb';
+export type Source = "lrb" | "fzb" | "llb";
 
 export interface SinaAPIResponse<R_FIELDS = string> {
   result: Result<R_FIELDS>;
@@ -92,7 +92,7 @@ export interface Datum<R_FIELDS = string> {
    * 6 中类
    */
   item_display_type: 1 | 2 | 3 | 6;
-  item_display: '中类' | '大类' | '小类' | '缩进';
+  item_display: "中类" | "大类" | "小类" | "缩进";
   item_precision: ItemPrecision;
   item_group_no: number;
   item_source: Source;
