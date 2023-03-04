@@ -25,16 +25,18 @@ export interface Status {
   code: number;
 }
 
-export type Source = "fzb" | 'llb';
+export type Source = 'lrb' | "fzb" | 'llb';
 
-export interface SinaAPIResponse<T = any> {
-  result: Result<T>;
+export interface SinaAPIResponse<R_FIELDS = string> {
+  result: Result<R_FIELDS>;
 }
 
-export interface Result<T> {
+export interface Result<R_FIELDS> {
   status: Status;
-  data: Data<T>;
+  data: Data<R_FIELDS>;
 }
+
+
 
 export interface Data<T = any> {
   /**
@@ -58,12 +60,23 @@ export interface ReportDate {
   date_type: 2 | 4;
 }
 
-export interface ReportList<T> {
-  [key: string]: T;
+export interface ReportList<R_FIELDS> {
+  [key: string]: Report<R_FIELDS>;
 }
 
-export interface Datum<FK> {
-  item_field: FK;
+export interface Report<R_FIELDS> {
+  rType: string;
+  rCurrency: string;
+  data_source: string;
+  is_audit: string;
+  publish_date: string;
+  update_time: number;
+  is_exist_yoy: boolean;
+  data: Datum<R_FIELDS>[];
+}
+
+export interface Datum<R_FIELDS = string> {
+  item_field: R_FIELDS;
   /**
    * 会计科目
    */

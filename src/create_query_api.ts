@@ -1,16 +1,16 @@
 import { AxiosResponse } from "axios";
 import { DateTime } from "luxon";
-import { BalanceSheet, BSDatum } from "./api_types";
+import { BS_FIELDS } from "./api_types";
 import client from "./client";
-import { ReportQueryParameter, SinaAPIResponse, SinaQueryParameter, Source } from "./type";
+import { Datum, ReportQueryParameter, SinaAPIResponse, SinaQueryParameter, Source } from "./type";
 
-function find_group_title(groups: BSDatum[], item: BSDatum): string {
+function find_group_title(groups: Datum[], item: Datum): string {
   return groups.find(
     group => group.item_group_no === item.item_group_no && group.item_display === '大类'
   )?.item_title ?? "未知";
 }
 
-export function create_query_api(source: Source) {
+export function create_query_api<T = string>(source: Source) {
   return async function (options: ReportQueryParameter) {
 
     const params: SinaQueryParameter = {
@@ -19,7 +19,7 @@ export function create_query_api(source: Source) {
       type: 0, // hard coded
     }
 
-    const response = await client.request<any, AxiosResponse<SinaAPIResponse<BalanceSheet>>>({
+    const response = await client.request<any, AxiosResponse<SinaAPIResponse<BS_FIELDS>>>({
       method: "get",
       params,
     })
@@ -45,7 +45,10 @@ export function create_query_api(source: Source) {
             item_group_title: find_group_title(groups, item)
           })),
         total_obj: data
-          .filter(item => item.item_field?.length > 0 && item.item_display == '中类')
+          .filter(
+            item => item.item_field?.length > 0
+              && (item.item_display == '中类' || item.item_display === '大类')
+          )
           .map(item => ({
             ...item,
             item_group_title: find_group_title(groups, item)
