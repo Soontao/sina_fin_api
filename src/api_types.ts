@@ -1,4 +1,4 @@
-import { Source } from "./type";
+import { Datum } from "./type";
 
 export type BS_ACC_FIELDS = "ACCHELDFORS" | "ACCREXPE"
   | "ACCUDEPR"
@@ -116,9 +116,10 @@ export type BS_ACC_FIELDS = "ACCHELDFORS" | "ACCREXPE"
   | "UNSEG"
   | "WARLIABRESE";
 
-
 export type BS_TOTAL_FIELDS = "PARESHARRIGH" | "RIGHAGGR" | "TOTALCURRLIAB" | "TOTALNONCASSETS" | "TOTALNONCLIAB" | "TOTASSET" | "TOTCURRASSET" | "TOTLIAB" | "TOTLIABSHAREQUI"
 
+
+export type BSDatum = Datum<BS_ACC_FIELDS | BS_TOTAL_FIELDS>
 
 export interface BalanceSheet {
   rType: string;
@@ -128,36 +129,5 @@ export interface BalanceSheet {
   publish_date: string;
   update_time: number;
   is_exist_yoy: boolean;
-  data: Datum[];
+  data: BSDatum[];
 }
-
-export interface Datum {
-  item_field: BS_ACC_FIELDS | BS_TOTAL_FIELDS;
-  /**
-   * 会计科目
-   */
-  item_title: string;
-  /**
-   * if available, the decimal value
-   */
-  item_value: null | string;
-  /**
-   * 1 大类
-   * 2 小类
-   * 3 小类但无值 - 缩进
-   * 6 中类
-   */
-  item_display_type: 1 | 2 | 3 | 6;
-  item_display: '中类' | '大类' | '小类' | '缩进';
-  item_precision: ItemPrecision;
-  item_group_no: number;
-  item_source: Source;
-  item_tongbi: number | string;
-}
-
-
-export enum ItemPrecision {
-  F2 = "f2",
-}
-
-
