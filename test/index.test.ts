@@ -1,4 +1,5 @@
 import { query_balance_sheet, query_cash_flow, query_income_statement, query_stock_by_node, query_stock_names } from "../src";
+import { query_all_balance_sheet } from "../src/api_balance_sheets";
 
 describe("Index Test Suite", () => {
 
@@ -56,6 +57,11 @@ describe("Index Test Suite", () => {
     for await (const stock of query_stock_names()) {
       expect(stock.symbol).not.toBeUndefined()
       expect(stock.name).not.toBeUndefined()
+      for await (const bs of query_all_balance_sheet(stock.symbol)) {
+        expect(bs.item_obj?.length).toBeGreaterThan(0)
+        expect(bs.total_obj?.length).toBeGreaterThan(0)
+        break
+      }
       break
     }
   });
