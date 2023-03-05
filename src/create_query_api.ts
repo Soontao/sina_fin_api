@@ -70,18 +70,18 @@ export function create_get_all_api(source: Source) {
   return function (symbol: string) {
     return {
       [Symbol.asyncIterator]: async function* () {
-        let page = 0;
+        let page = 1;
         for (; ;) {
-          const statements = await api({
+          const reports = await api({
             page,
             paperCode: symbol,
             num: 10,
           });
 
-          if (statements?.length > 0) {
+          if (reports?.length > 0) {
             page++;
-            for (const stat of statements) {
-              yield stat;
+            for (const report of reports) {
+              yield report;
             }
           }
           else {

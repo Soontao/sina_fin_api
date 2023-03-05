@@ -30,7 +30,7 @@ export type Nodes = "hs_a" | "hs_b";
 export function query_stock_by_node(node: Nodes) {
   return {
     [Symbol.asyncIterator]: async function* () {
-      let page = 0;
+      let page = 1;
       for (; ;) {
         await sleep(INTERVAL_BEFORE_INVOKE); // reduce sina server consumption
         const response = await client.get<Array<Stock>>(STOCK_URL, {
