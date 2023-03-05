@@ -3,6 +3,7 @@ import { AxiosResponse } from "axios";
 import { DateTime } from "luxon";
 import client from "./client";
 import { INTERVAL_BEFORE_INVOKE, REPORT_URL } from "./constants";
+import sem from "./sem";
 import { Datum, ReportQueryParameter, SinaAPIResponse, SinaQueryParameter, Source } from "./type";
 
 function find_group_title<T = any>(groups: Datum<T>[], item: Datum<T>): string {
@@ -22,11 +23,14 @@ export function create_query_api<T extends string = string>(source: Source) {
 
     await sleep(INTERVAL_BEFORE_INVOKE); // avoid rate limit
 
-    const response = await client.request<any, AxiosResponse<SinaAPIResponse<T>>>({
-      url: REPORT_URL,
-      method: "get",
-      params,
+    const response = await sem.use(() => {
+      return client.request<any, AxiosResponse<SinaAPIResponse<T>>>({
+        url: REPORT_URL,
+        method: "get",
+        params,
+      });
     });
+
 
     if (parseInt(response.data?.result?.data?.report_count ?? 0) == 0) {
       return [];

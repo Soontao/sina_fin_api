@@ -12,5 +12,8 @@
     "npmjs",
     "paren",
     "Sina"
-  ]
+  ],
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  }
 }

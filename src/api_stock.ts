@@ -1,6 +1,7 @@
 import { sleep } from "@newdash/newdash";
 import client from "./client";
 import { INTERVAL_BEFORE_INVOKE, STOCK_URL } from "./constants";
+import sem from "./sem";
 
 export interface Stock {
   symbol: string;
@@ -33,9 +34,11 @@ export function query_stock_by_node(node: Nodes) {
       let page = 1;
       for (; ;) {
         await sleep(INTERVAL_BEFORE_INVOKE); // reduce sina server consumption
-        const response = await client.get<Array<Stock>>(STOCK_URL, {
+
+        const response = await sem.use(() => client.get<Array<Stock>>(STOCK_URL, {
           params: { page, node, sort: "symbol", num: 50, asc: 1 }
-        });
+        }));
+
         if (response.data?.length > 0) {
           page++;
           for (const stock of response.data) {
