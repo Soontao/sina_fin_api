@@ -2,6 +2,7 @@
   "name": "sina-fin-api",
   "version": "0.0.1",
   "main": "lib/index.js",
+  "description": "research purpose fin API",
   "engines": {
     "node": ">=16",
     "npm": ">=7"
