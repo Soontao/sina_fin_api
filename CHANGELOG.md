@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.3](https://github.com/Soontao/sina_fin_api/compare/v0.0.2...v0.0.3) (2023-03-05)
+
+
+### Features
+
+* async iterator API ([90d0abc](https://github.com/Soontao/sina_fin_api/commit/90d0abc4b82ccc8420c6f41f5971dd72ea87a408))
+
+
+### Bug Fixes
+
+* ut ([bb02c12](https://github.com/Soontao/sina_fin_api/commit/bb02c12d13a9b375e6efe0cc098b37c9c2d5ec0f))
+
 ### 0.0.2 (2023-03-05)
 
 
