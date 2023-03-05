@@ -1,6 +1,8 @@
+import { sleep } from "@newdash/newdash";
 import { AxiosResponse } from "axios";
 import { DateTime } from "luxon";
 import client from "./client";
+import { INTERVAL_BEFORE_INVOKE, REPORT_URL } from "./constants";
 import { Datum, ReportQueryParameter, SinaAPIResponse, SinaQueryParameter, Source } from "./type";
 
 function find_group_title<T = any>(groups: Datum<T>[], item: Datum<T>): string {
@@ -18,7 +20,10 @@ export function create_query_api<T extends string = string>(source: Source) {
       type: 0, // hard coded
     };
 
+    await sleep(INTERVAL_BEFORE_INVOKE); // avoid rate limit
+
     const response = await client.request<any, AxiosResponse<SinaAPIResponse<T>>>({
+      url: REPORT_URL,
       method: "get",
       params,
     });
@@ -60,3 +65,30 @@ export function create_query_api<T extends string = string>(source: Source) {
 }
 
 
+export function create_get_all_api(source: Source) {
+  const api = create_query_api(source);
+  return function (symbol: string) {
+    return {
+      [Symbol.asyncIterator]: async function* () {
+        let page = 0;
+        for (; ;) {
+          const statements = await api({
+            page,
+            paperCode: symbol,
+            num: 10,
+          });
+
+          if (statements?.length > 0) {
+            page++;
+            for (const stat of statements) {
+              yield stat;
+            }
+          }
+          else {
+            break;
+          }
+        }
+      }
+    };
+  };
+} 

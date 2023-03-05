@@ -5,3 +5,4 @@ jest.config.js
 test
 *.json
 src/api_types.ts
+src/constants.ts

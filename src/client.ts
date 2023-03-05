@@ -1,6 +1,12 @@
 import axios from "axios";
-import { BASE_URL } from "./constants";
 
-export const client = axios.create({ baseURL: BASE_URL, validateStatus: () => true });
+export const client = axios.create({
+  validateStatus: (status) => {
+    if (status === 456) {
+      throw new TypeError(`sina rate limit`);
+    }
+    return true;
+  }
+});
 
 export default client;

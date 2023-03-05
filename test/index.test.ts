@@ -1,4 +1,4 @@
-import { query_balance_sheet, query_cash_flow, query_income_statement } from "../src";
+import { query_balance_sheet, query_cash_flow, query_income_statement, query_stock_by_node, query_stock_names } from "../src";
 
 describe("Index Test Suite", () => {
 
@@ -40,6 +40,24 @@ describe("Index Test Suite", () => {
     expect(report_2022_end).not.toBeUndefined()
     expect(report_2022_end?.item_obj).toMatchSnapshot("income statement items")
     expect(report_2022_end?.total_obj).toMatchSnapshot("income statement total")
+  });
+
+  it('should support query stock names by node', async () => {
+    let i = 0
+    for await (const stock of query_stock_by_node("hs_b")) {
+      expect(stock.symbol).not.toBeUndefined()
+      expect(stock.name).not.toBeUndefined()
+      i++
+    }
+    expect(i).toBeGreaterThanOrEqual(86)
+  });
+
+  it('should support query all stocks', async () => {
+    for await (const stock of query_stock_names()) {
+      expect(stock.symbol).not.toBeUndefined()
+      expect(stock.name).not.toBeUndefined()
+      break
+    }
   });
 
 });
